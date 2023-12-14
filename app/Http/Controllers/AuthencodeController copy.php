@@ -678,7 +678,67 @@ class AuthencodeController extends Controller
         ]);
     }
     public function authencode(Request $request)
-    { 
+    {
+        // $category = $request->input('category');
+        // $url = "http://localhost:8189/api/nhso-service/confirm-save/$request->pid";
+            // [
+            //       'pid'              =>  $request->pid,
+            //      'claimType'        =>  $request->claimType,
+            //        'mobile'           =>  $request->mobile,
+            //       'correlationId'    =>  $request->correlationId,
+            //      'hn'               =>  $request->hn,
+            //       'hcode'            =>  $request->hcode
+            // ]
+      
+        // $ch = curl_init();
+        // curl_setopt($ch, CURLOPT_URL, $url);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $result = curl_exec($ch);
+        // if ($result === false) {
+        //     $error = curl_error($ch);
+        //     curl_close($ch);
+        //     // return view('inventory.client')->with('error', $error);
+        // }
+        // curl_close($ch);
+        // $inventory = json_decode($result);
+        // $ip = $request->ip(); 
+        // $authen = Http::post(
+        //     "http://localhost:8189/api/nhso-service/confirm-save/",
+        //     [
+        //         'pid'              =>  $request->pid,
+        //         'claimType'        =>  $request->claimType,
+        //         'mobile'           =>  $request->mobile,
+        //         'correlationId'    =>  $request->correlationId,
+        //         'hn'               =>  $request->hn,
+        //         'hcode'            =>  $request->hcode
+        //     ]
+        // );
+        
+        // $response = Http::withHeaders([ 
+        //     'User-Agent:<platform>/<version> <10978>',
+        //     'Accept' => 'application/json',
+        // ])->post('http://localhost:8189/api/nhso-service/confirm-save/', [
+        //     'pid'              =>  $request->pid,
+        //     'claimType'        =>  $request->claimType,
+        //     'mobile'           =>  $request->mobile,
+        //     'correlationId'    =>  $request->correlationId,
+        //     'hn'               =>  $request->hn,
+        //     'hcode'            =>  $request->hcode
+        // ]);  
+        // curl -X 'POST' \
+        //     'http://localhost:8189/api/nhso-service/confirm-save' \
+        //     -H 'accept: */*' \
+        //     -H 'Content-Type: application/json' \
+        //     -d '{
+        //     "pid": "1119902562806",
+        //     "claimType": "PG0060001",
+        //     "mobile": "string",
+        //     "correlationId": "63a369bb-5771-4335-9427-e3156ef41bfc",
+        //     "hn": "string",
+        //     "hcode": "string"
+        //     }'
+        // $fame_send = curl_init();
+        // 'User-Agent:<platform>/<version><10978>' 
         $postData_send =  [
                     'pid'              =>  $request->pid,
                     'claimType'        =>  $request->claimType,
@@ -686,9 +746,11 @@ class AuthencodeController extends Controller
                     'correlationId'    =>  $request->correlationId,
                     'hn'               =>  $request->hn,
                     'hcode'            =>  $request->hcode
-        ]; 
+        ];
+        // // 'Authorization : Bearer '.$token,
         $headers_send  = [            
-            'Content-Type: application/json'  
+            'Content-Type: application/json'           
+                         
         ];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,"http://localhost:8189/api/nhso-service/confirm-save/");
@@ -702,14 +764,44 @@ class AuthencodeController extends Controller
         
         $content = $server_output;
         $result = json_decode($content, true);
-        // dd($result);         
+        // dd($result);
+        // #echo "<BR>";
+        // @$status = $result['status'];
+        // #echo "<BR>";
+        // @$message = $result['message'];
+
+  
         Patient::where('cid', $request->pid)
             ->update([
                 'hometel'    => $request->mobile
-            ]);      
+            ]); 
+     
         return response()->json([
             'status'     => '200'
-        ]); 
+        ]);
+
+
+        // $authen = Http::post("http://localhost:8189/api/nhso-service/save-as-draft/",[
+        //     'pid'              =>  "pid",
+        //     'claimType'        =>  "claimType",
+        //     'mobile'           =>  "mobile",
+        //     'correlationId'    =>  "correlationId",
+        //     'hcode'            =>  "hcode"
+        // ]);
+        // $authen = new Authencode;
+        // $authen->pid = $req->pid;
+        // $authen->claimType = $req->claimType;
+        // $authen->mobile = $req->mobile;
+        // $authen->correlationId = $req->correlationId;
+        // $authen->hcode = $req->hcode;
+
+        // $result = $authen->save();
+
+        // if ($result) {
+        //     return ["result" => "Data Save success"];
+        // } else {
+        //     return ["result" => "Data Save Fail"];
+        // }
 
     }
 
